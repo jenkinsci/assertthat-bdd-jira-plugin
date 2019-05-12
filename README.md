@@ -1,4 +1,4 @@
-# assertthat-bdd-jira-plugin
+# AssertThat BDD Jira Plugin
 
 Jenkins plugin for interaction with [AssertThat BDD Jira plugin](https://marketplace.atlassian.com/apps/1219033/assertthat-bdd-test-management-in-jira?hosting=cloud&tab=overview).
 
