@@ -10,9 +10,13 @@ Main features are:
 
 ## Usage in Job 
 
-Downloading feature files: 
+Download feature files: 
 
-Uploading reports:
+![Download feature files](docs/download-features.PNG?raw=true "Download feature files")
+
+Upload reports:
+
+![Upload reports](docs/upload-reports.PNG?raw=true "Upload reports")
 
 ## Usage in pipeline Job
 
