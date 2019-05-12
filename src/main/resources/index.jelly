@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+    Jenkins plugin for interaction with AssertThat BDD Jira plugin.
+</div>
