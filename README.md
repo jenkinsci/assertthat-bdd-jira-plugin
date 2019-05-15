@@ -8,6 +8,10 @@ Main features are:
 - Filter features to download based on mode (automated/manual/both), or/and JQL
 - Upload cucumber json after the run to AsserTthat BDD Jira plugin
 
+## Create credentials
+
+![Create credentials](docs/credentials.PNG?raw=true "Create credentials")
+
 ## Usage in Job 
 
 Download feature files: 
