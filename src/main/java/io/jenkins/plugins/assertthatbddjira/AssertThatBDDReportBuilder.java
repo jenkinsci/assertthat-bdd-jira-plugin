@@ -43,20 +43,25 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     private final String jsonReportFolder;
     private final String jsonReportIncludePattern;
     private final String runName;
+    private final String type;
 
     @DataBoundConstructor
-    public AssertThatBDDReportBuilder(String projectId, String credentialsId, String jsonReportFolder, String jsonReportIncludePattern, String runName) {
+    public AssertThatBDDReportBuilder(String projectId, String credentialsId, String jsonReportFolder, String jsonReportIncludePattern, String runName, String type) {
         this.projectId = projectId;
         this.credentialsId = credentialsId;
         this.jsonReportFolder = jsonReportFolder;
         this.jsonReportIncludePattern = jsonReportIncludePattern;
         this.runName = runName;
+        this.type = type;
     }
 
     public String getProjectId() {
         return projectId;
     }
 
+    public String getType() {
+        return type;
+    }
 
     public String getCredentialsId() {
         return credentialsId;
@@ -95,7 +100,8 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
                 null,
                 null,
                 null,
-                null
+                null,
+                type
         );
         APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword());
 
@@ -116,7 +122,7 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
             }
             Long runId = -1L;
             for (String f : files) {
-                runId = apiUtil.upload(runId, arguments.getRunName(), (reportPath.endsWith("/") ? reportPath : reportPath + "/") + f);
+                runId = apiUtil.upload(runId, arguments.getRunName(), (reportPath.endsWith("/") ? reportPath : reportPath + "/") + f, arguments.getType());
             }
         } catch (JSONException | IOException | InterruptedException e) {
             throw new RuntimeException("[AssertThat BDD] Failed to upload report: ", e);
@@ -133,9 +139,15 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        public FormValidation doCheckProjectId(@QueryParameter String projectId, @QueryParameter String outputFolder, @QueryParameter String mode) {
+        public FormValidation doCheckProjectId(@QueryParameter String projectId) {
             if (projectId == null || projectId.length() == 0)
                 return FormValidation.error(io.jenkins.plugins.assertthatbddjira.Messages.AssertThatBDDReportBuilder_DescriptorImpl_errors_missingProjectId());
+            return FormValidation.ok();
+        }
+
+        public FormValidation doCheckCredentialsId(@QueryParameter String credentialsId) {
+            if (credentialsId == null || credentialsId.length() == 0)
+                return FormValidation.error(io.jenkins.plugins.assertthatbddjira.Messages.AssertThatBDDReportBuilder_DescriptorImpl_errors_missingCredentialsId());
             return FormValidation.ok();
         }
 

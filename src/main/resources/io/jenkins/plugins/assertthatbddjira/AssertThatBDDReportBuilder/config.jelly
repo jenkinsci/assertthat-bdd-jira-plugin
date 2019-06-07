@@ -18,5 +18,12 @@
         <f:entry title="${%runName}" field="runName">
             <f:textbox />
         </f:entry>
+          <f:entry name="type" title="${%type}" field="type">
+              <select name="type">
+                  <option value="cucumber" selected="selected">Cucumber</option>
+                  <option value="karate">Karate</option>
+
+              </select>
+          </f:entry>
     </f:advanced>
 </j:jelly>

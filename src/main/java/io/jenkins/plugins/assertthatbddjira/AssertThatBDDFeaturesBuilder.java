@@ -95,7 +95,8 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
                 null,
                 null,
                 mode,
-                jql
+                jql,
+                null
         );
     
         APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword());
@@ -118,13 +119,18 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-        public FormValidation doCheckProjectId(@QueryParameter String projectId, @QueryParameter String outputFolder, @QueryParameter String mode)
+        public FormValidation doCheckProjectId(@QueryParameter String projectId)
                 throws IOException, ServletException {
             if (projectId ==null || projectId.length() == 0)
                 return FormValidation.error(io.jenkins.plugins.assertthatbddjira.Messages.AssertThatBDDFeaturesBuilder_DescriptorImpl_errors_missingProjectId());
             return FormValidation.ok();
         }
-    
+        public FormValidation doCheckCredentialsId(@QueryParameter String credentialsId) {
+            if (credentialsId == null || credentialsId.length() == 0)
+                return FormValidation.error(io.jenkins.plugins.assertthatbddjira.Messages.AssertThatBDDFeaturesBuilder_DescriptorImpl_errors_missingCredentialsId());
+            return FormValidation.ok();
+        }
+
         public ListBoxModel doFillCredentialsIdItems(@AncestorInPath Jenkins context,
                                                      @QueryParameter String remoteBase) {
             if (context == null || !context.hasPermission(Item.CONFIGURE)) {
