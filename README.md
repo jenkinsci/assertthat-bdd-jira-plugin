@@ -20,7 +20,7 @@ Download feature files:
 
 Upload reports:
 
-![Upload reports](docs/upload-reports.PNG?raw=true "Upload reports")
+![Upload reports](docs/upload-report.PNG?raw=true "Upload reports")
 
 ## Usage in pipeline Job
 
