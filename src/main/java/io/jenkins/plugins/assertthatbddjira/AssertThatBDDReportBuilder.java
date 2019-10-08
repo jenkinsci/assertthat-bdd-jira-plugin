@@ -44,15 +44,33 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     private final String jsonReportIncludePattern;
     private final String runName;
     private final String type;
+    private final String proxyURI;
+    private final String proxyUsername;
+    private final String proxyPassword;
+
+    public String getProxyURI() {
+        return proxyURI;
+    }
+
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
+    public String getProxyPassword() {
+        return proxyPassword;
+    }
 
     @DataBoundConstructor
-    public AssertThatBDDReportBuilder(String projectId, String credentialsId, String jsonReportFolder, String jsonReportIncludePattern, String runName, String type) {
+    public AssertThatBDDReportBuilder(String projectId, String credentialsId, String jsonReportFolder, String jsonReportIncludePattern, String runName, String type,  String proxyURI, String proxyUsername, String proxyPassword) {
         this.projectId = projectId;
         this.credentialsId = credentialsId;
         this.jsonReportFolder = jsonReportFolder;
         this.jsonReportIncludePattern = jsonReportIncludePattern;
         this.runName = runName;
         this.type = type;
+        this.proxyURI = proxyURI;
+        this.proxyUsername = proxyUsername;
+        this.proxyPassword=proxyPassword;
     }
 
     public String getProjectId() {
@@ -96,9 +114,9 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
                 null,
                 jsonReportFolder,
                 jsonReportIncludePattern,
-                null,
-                null,
-                null,
+                proxyURI,
+                proxyUsername,
+                proxyPassword,
                 null,
                 null,
                 type

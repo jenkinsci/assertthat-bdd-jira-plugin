@@ -43,7 +43,23 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     private final String mode;
     private final String jql;
     private final String credentialsId;
-    
+    private final String proxyURI;
+    private final String proxyUsername;
+    private final String proxyPassword;
+
+    public String getProxyURI() {
+        return proxyURI;
+    }
+
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
+    public String getProxyPassword() {
+        return proxyPassword;
+    }
+
+
     public String getCredentialsId() {
         return credentialsId;
     }
@@ -66,12 +82,15 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     }
     
     @DataBoundConstructor
-    public AssertThatBDDFeaturesBuilder(String projectId, String credentialsId, String outputFolder, String jql, String mode) {
+    public AssertThatBDDFeaturesBuilder(String projectId, String credentialsId, String outputFolder, String jql, String mode, String proxyURI, String proxyUsername, String proxyPassword) {
         this.projectId = projectId;
         this.outputFolder = outputFolder;
         this.mode = mode;
         this.jql = jql;
         this.credentialsId = credentialsId;
+        this.proxyURI = proxyURI;
+        this.proxyUsername = proxyUsername;
+        this.proxyPassword=proxyPassword;
     }
     
     private AssertThatBDDCredentials getAssertThatBDDCredentials(String credentialsId) {
@@ -91,9 +110,9 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
                 outputFolder,
                 null,
                 null,
-                null,
-                null,
-                null,
+                proxyURI,
+                proxyUsername,
+                proxyPassword,
                 mode,
                 jql,
                 null
