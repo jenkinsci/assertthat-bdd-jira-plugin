@@ -36,6 +36,8 @@ import java.util.List;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
+
 public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuildStep {
 
     private final String projectId;
@@ -46,6 +48,11 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     private final String proxyURI;
     private final String proxyUsername;
     private final String proxyPassword;
+    private final String jiraServerUrl;
+
+    public String getJiraServerUrl() {
+        return jiraServerUrl;
+    }
 
     public String getProxyURI() {
         return proxyURI;
@@ -82,7 +89,7 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     }
     
     @DataBoundConstructor
-    public AssertThatBDDFeaturesBuilder(String projectId, String credentialsId, String outputFolder, String jql, String mode, String proxyURI, String proxyUsername, String proxyPassword) {
+    public AssertThatBDDFeaturesBuilder(String projectId, String credentialsId, String outputFolder, String jql, String mode, String proxyURI, String proxyUsername, String proxyPassword, String jiraServerUrl) {
         this.projectId = projectId;
         this.outputFolder = outputFolder;
         this.mode = mode;
@@ -91,6 +98,7 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
         this.proxyURI = proxyURI;
         this.proxyUsername = proxyUsername;
         this.proxyPassword=proxyPassword;
+        this.jiraServerUrl = jiraServerUrl;
     }
     
     private AssertThatBDDCredentials getAssertThatBDDCredentials(String credentialsId) {
@@ -115,10 +123,11 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
                 proxyPassword,
                 mode,
                 jql,
-                null
+                null,
+                jiraServerUrl
         );
-    
-        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword());
+        String url = arguments.getJiraServerUrl()==null || arguments.getJiraServerUrl().trim().length()==0? null: arguments.getJiraServerUrl().trim();
+        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(),url);
     
         try {
             String outputPath = workspace.toURI().getPath();

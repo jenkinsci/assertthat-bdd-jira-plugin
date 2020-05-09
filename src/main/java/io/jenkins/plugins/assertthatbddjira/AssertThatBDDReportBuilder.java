@@ -47,6 +47,11 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     private final String proxyURI;
     private final String proxyUsername;
     private final String proxyPassword;
+    private final String jiraServerUrl;
+
+    public String getJiraServerUrl() {
+        return jiraServerUrl;
+    }
 
     public String getProxyURI() {
         return proxyURI;
@@ -61,7 +66,7 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     }
 
     @DataBoundConstructor
-    public AssertThatBDDReportBuilder(String projectId, String credentialsId, String jsonReportFolder, String jsonReportIncludePattern, String runName, String type,  String proxyURI, String proxyUsername, String proxyPassword) {
+    public AssertThatBDDReportBuilder(String projectId, String credentialsId, String jsonReportFolder, String jsonReportIncludePattern, String runName, String type,  String proxyURI, String proxyUsername, String proxyPassword, String jiraServerUrl) {
         this.projectId = projectId;
         this.credentialsId = credentialsId;
         this.jsonReportFolder = jsonReportFolder;
@@ -71,6 +76,7 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
         this.proxyURI = proxyURI;
         this.proxyUsername = proxyUsername;
         this.proxyPassword=proxyPassword;
+        this.jiraServerUrl = jiraServerUrl;
     }
 
     public String getProjectId() {
@@ -119,9 +125,11 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
                 proxyPassword,
                 null,
                 null,
-                type
+                type,
+                jiraServerUrl
         );
-        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword());
+        String url = arguments.getJiraServerUrl()==null || arguments.getJiraServerUrl().trim().length()==0? null: arguments.getJiraServerUrl().trim();
+        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(),url);
 
         String[] files;
         try {

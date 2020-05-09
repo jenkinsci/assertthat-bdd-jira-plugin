@@ -9,7 +9,7 @@
     </parent>
     <groupId>io.jenkins.plugins</groupId>
     <artifactId>assertthat-bdd-jira</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4</version>
     <packaging>hpi</packaging>
     <properties>
         <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>com.assertthat.plugins</groupId>
             <artifactId>assertthat-bdd-standalone</artifactId>
-            <version>1.4</version>
+            <version>1.6</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.sonatype.sisu</groupId>

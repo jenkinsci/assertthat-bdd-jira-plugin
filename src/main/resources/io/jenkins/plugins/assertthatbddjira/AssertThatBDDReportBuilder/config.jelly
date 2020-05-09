@@ -9,6 +9,10 @@
    <f:entry title="${%jsonReportFolder}" field="jsonReportFolder">
       <f:textbox />
    </f:entry>
+   <f:entry title="${%jiraServerUrl}" field="jiraServerUrl"
+         description="${%jiraServerUrlDescr}">
+         <f:textbox />
+   </f:entry>
    <f:advanced>
       <f:entry title="${%jsonReportIncludePattern}" field="jsonReportIncludePattern">
          <f:textbox />

@@ -31,7 +31,7 @@ pipeline {
         stage('Features') { 
             steps {
                 //Download feature files
-                assertthatBddFeatures(credentialsId: '10005', jql: 'project=DEMO', mode: 'automated', outputFolder: 'features', projectId: '10005')
+                assertthatBddFeatures(credentialsId: '10005',  jiraServerUrl: '', jql: 'project=DEMO', mode: 'automated', outputFolder: 'features', projectId: '10005')
             }
         }
         stage('Run tests') { 
@@ -44,7 +44,7 @@ pipeline {
     post{
         always{
                 //Upload test results
-                assertthatBddReport(credentialsId: '10005', jsonReportFolder: 'report', jsonReportIncludePattern: '**/*.json', projectId: '10005', runName: 'Smoke test run', type: 'karate')
+                assertthatBddReport(credentialsId: '10005',  jiraServerUrl: '', jsonReportFolder: 'report', jsonReportIncludePattern: '**/*.json', projectId: '10005', runName: 'Smoke test run', type: 'karate')
         }
     }
 

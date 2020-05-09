@@ -10,6 +10,10 @@
       description="${%outputFolderDescr}">
       <f:textbox />
    </f:entry>
+      <f:entry title="${%jiraServerUrl}" field="jiraServerUrl"
+         description="${%jiraServerUrlDescr}">
+         <f:textbox />
+      </f:entry>
    <f:advanced>
       <f:entry title="${%jql}" field="jql"
          description="${%jqlDescr}">

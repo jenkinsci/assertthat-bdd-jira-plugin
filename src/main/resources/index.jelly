@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-    Jenkins plugin for interaction with AssertThat BDD Jira plugin.
+    Jenkins plugin for interaction with 'AssertThat-BDD and Cucumber for Jira' plugin for Cloud and Server Jira
 </div>
