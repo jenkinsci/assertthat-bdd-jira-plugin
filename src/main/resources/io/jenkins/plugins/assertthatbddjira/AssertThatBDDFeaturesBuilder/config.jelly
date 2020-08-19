@@ -19,6 +19,10 @@
          description="${%jqlDescr}">
          <f:textbox />
       </f:entry>
+      <f:entry title="${%tags}" field="tags"
+         description="${%tagsDescr}">
+         <f:textbox />
+      </f:entry>
       <f:entry name="mode" title="${%mode}" field="mode" description="${%modeDescr}">
          <select name="mode">
             <option value="automated" selected="selected">Automated</option>
