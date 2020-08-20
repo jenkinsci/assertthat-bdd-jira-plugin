@@ -125,6 +125,7 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
                 proxyPassword,
                 null,
                 null,
+                null,
                 type,
                 jiraServerUrl
         );
