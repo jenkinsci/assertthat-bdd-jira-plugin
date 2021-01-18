@@ -31,7 +31,7 @@ pipeline {
         stage('Features') { 
             steps {
                 //Download feature files
-                assertthatBddFeatures(credentialsId: '10005',  jiraServerUrl: '', jql: 'project=DEMO', mode: 'automated', outputFolder: 'features', projectId: '10005')
+                assertthatBddFeatures(credentialsId: '10005',  jiraServerUrl: '', jql: 'project=DEMO', mode: 'automated', tags: '@smoke', outputFolder: 'features', projectId: '10005')
             }
         }
         stage('Run tests') { 
