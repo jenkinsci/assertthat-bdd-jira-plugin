@@ -155,7 +155,10 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
             File inZip = apiUtil.download(new File(outputPath), mode, jql,
                     tags, false);
             File zip = new FileUtil().unpackArchive(inZip, new File(outputPath));
-            zip.delete();
+            boolean wasDeleted = zip.delete();
+            if (wasDeleted){
+                listener.getLogger().println("[AssertThat BDD] Deleting zip:  " + zip.getName());
+            }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("[AssertThat BDD] Failed to download features: ", e);
         }
