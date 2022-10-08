@@ -9,7 +9,7 @@
     </parent>
     <groupId>io.jenkins.plugins</groupId>
     <artifactId>assertthat-bdd-jira</artifactId>
-    <version>1.8</version>
+    <version>1.9-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <properties>
         <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
@@ -112,7 +112,7 @@
         <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-      <tag>assertthat-bdd-jira-1.8</tag>
+      <tag>HEAD</tag>
   </scm>
     <repositories>
         <repository>
