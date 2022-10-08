@@ -13,18 +13,18 @@
          description="${%jiraServerUrlDescr}">
          <f:textbox />
    </f:entry>
-   <f:advanced>
-      <f:entry title="${%jsonReportIncludePattern}" field="jsonReportIncludePattern">
+   <f:entry title="${%jsonReportIncludePattern}" field="jsonReportIncludePattern">
          <f:textbox />
-      </f:entry>
-      <f:entry title="${%runName}" field="runName">
-         <f:textbox />
-      </f:entry>
+    </f:entry>
       <f:entry name="type" title="${%type}" field="type">
          <select name="type">
             <option value="cucumber" selected="selected">Cucumber</option>
             <option value="karate">Karate</option>
          </select>
+      </f:entry>
+    <f:advanced>
+      <f:entry title="${%runName}" field="runName">
+         <f:textbox />
       </f:entry>
       <f:entry title="${%proxyURI}" field="proxyURI"
          description="${%proxyURIDescr}">
@@ -38,5 +38,13 @@
          description="${%proxyPasswordDescr}">
          <f:textbox />
       </f:entry>
+       <f:entry title="${%ignoreCertErrors}" field="ignoreCertErrors" description="${%ignoreCertErrorsDescr}">
+                      <f:entry>
+                        <f:radio name="ignoreCertErrors" title="True" value="true" checked="${instance.ignoreCertErrors}" />
+                      </f:entry>
+                      <f:entry>
+                        <f:radio name="ignoreCertErrors" title="False" value="false" checked="${!instance.ignoreCertErrors}" />
+                      </f:entry>
+                  </f:entry>
    </f:advanced>
 </j:jelly>

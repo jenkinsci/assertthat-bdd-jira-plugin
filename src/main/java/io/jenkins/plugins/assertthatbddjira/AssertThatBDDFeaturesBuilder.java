@@ -46,12 +46,18 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     private final String proxyUsername;
     private final String proxyPassword;
     private final String jiraServerUrl;
+    private final boolean ignoreCertErrors;
+
     @DataBoundConstructor
     public AssertThatBDDFeaturesBuilder(String projectId,
                                         String credentialsId,
                                         String outputFolder, String jql,
                                         String tags, String mode,
-                                        String proxyURI, String proxyUsername, String proxyPassword, String jiraServerUrl) {
+                                        String proxyURI,
+                                        String proxyUsername,
+                                        String proxyPassword,
+                                        String jiraServerUrl,
+                                        boolean ignoreCertErrors) {
         this.projectId = projectId;
         this.outputFolder = outputFolder;
         this.mode = mode;
@@ -62,6 +68,11 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
         this.proxyUsername = proxyUsername;
         this.proxyPassword = proxyPassword;
         this.jiraServerUrl = jiraServerUrl;
+        this.ignoreCertErrors = ignoreCertErrors;
+    }
+
+    public boolean getIgnoreCertErrors() {
+        return ignoreCertErrors;
     }
 
     public String getTags() {
@@ -128,10 +139,12 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
                 jql,
                 tags,
                 null,
-                jiraServerUrl
+                jiraServerUrl,
+                true,
+                ignoreCertErrors
         );
         String url = arguments.getJiraServerUrl() == null || arguments.getJiraServerUrl().trim().length() == 0 ? null : arguments.getJiraServerUrl().trim();
-        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(), url);
+        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(), url, arguments.isIgnoreCertErrors());
 
         try {
             String outputPath = workspace.toURI().getPath();
@@ -140,9 +153,9 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
             }
             listener.getLogger().println("[AssertThat BDD] Downloading features to:  " + outputPath);
             File inZip = apiUtil.download(new File(outputPath), mode, jql,
-                    tags);
+                    tags, false);
             File zip = new FileUtil().unpackArchive(inZip, new File(outputPath));
-            boolean deleted = zip.delete();
+            zip.delete();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("[AssertThat BDD] Failed to download features: ", e);
         }

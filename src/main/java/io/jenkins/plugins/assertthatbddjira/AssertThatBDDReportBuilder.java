@@ -33,6 +33,7 @@ import org.kohsuke.stapler.QueryParameter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,34 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     private final String proxyUsername;
     private final String proxyPassword;
     private final String jiraServerUrl;
+    private final boolean ignoreCertErrors;
+
+    @DataBoundConstructor
+    public AssertThatBDDReportBuilder(String projectId,
+                                      String credentialsId,
+                                      String jsonReportFolder,
+                                      String jsonReportIncludePattern,
+                                      String runName, String type,
+                                      String proxyURI, String proxyUsername,
+                                      String proxyPassword,
+                                      String jiraServerUrl,
+                                      boolean ignoreCertErrors) {
+        this.projectId = projectId;
+        this.credentialsId = credentialsId;
+        this.jsonReportFolder = jsonReportFolder;
+        this.jsonReportIncludePattern = jsonReportIncludePattern;
+        this.runName = runName;
+        this.type = type;
+        this.proxyURI = proxyURI;
+        this.proxyUsername = proxyUsername;
+        this.proxyPassword = proxyPassword;
+        this.jiraServerUrl = jiraServerUrl;
+        this.ignoreCertErrors = ignoreCertErrors;
+    }
+
+    public boolean isIgnoreCertErrors() {
+        return ignoreCertErrors;
+    }
 
     public String getJiraServerUrl() {
         return jiraServerUrl;
@@ -63,20 +92,6 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
 
     public String getProxyPassword() {
         return proxyPassword;
-    }
-
-    @DataBoundConstructor
-    public AssertThatBDDReportBuilder(String projectId, String credentialsId, String jsonReportFolder, String jsonReportIncludePattern, String runName, String type,  String proxyURI, String proxyUsername, String proxyPassword, String jiraServerUrl) {
-        this.projectId = projectId;
-        this.credentialsId = credentialsId;
-        this.jsonReportFolder = jsonReportFolder;
-        this.jsonReportIncludePattern = jsonReportIncludePattern;
-        this.runName = runName;
-        this.type = type;
-        this.proxyURI = proxyURI;
-        this.proxyUsername = proxyUsername;
-        this.proxyPassword=proxyPassword;
-        this.jiraServerUrl = jiraServerUrl;
     }
 
     public String getProjectId() {
@@ -127,16 +142,18 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
                 null,
                 null,
                 type,
-                jiraServerUrl
+                jiraServerUrl,
+                false,
+                ignoreCertErrors
         );
-        String url = arguments.getJiraServerUrl()==null || arguments.getJiraServerUrl().trim().length()==0? null: arguments.getJiraServerUrl().trim();
-        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(),url);
+        String url = arguments.getJiraServerUrl() == null || arguments.getJiraServerUrl().trim().length() == 0 ? null : arguments.getJiraServerUrl().trim();
+        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(), url, false);
 
         String[] files;
         try {
-            String reportPath = workspace.toURI().getPath();
-            if (!arguments.getJsonReportFolder().trim().isEmpty() && !arguments.getJsonReportFolder().trim().replaceAll("/|\\\\","").isEmpty()) {
-                reportPath = workspace.toURI().resolve(arguments.getJsonReportFolder()).getPath();
+            String reportPath = Paths.get(workspace.toURI()).toString();
+            if (!arguments.getJsonReportFolder().trim().isEmpty() && !arguments.getJsonReportFolder().trim().replaceAll("/|\\\\", "").isEmpty()) {
+                reportPath = Paths.get(workspace.toURI().resolve(arguments.getJsonReportFolder())).toString();
             }
             if (!new File(reportPath).exists()) {
                 listener.getLogger().println("[AssertThat BDD] Report folder doesn't exist:  " + reportPath);
@@ -149,9 +166,9 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
             }
             Long runId = -1L;
             for (String f : files) {
-                runId = apiUtil.upload(runId, arguments.getRunName(), (reportPath.endsWith("/") ? reportPath : reportPath + "/") + f, arguments.getType());
+                runId = apiUtil.upload(runId, arguments.getRunName(), (reportPath.endsWith("/") ? reportPath : reportPath + "/") + f, arguments.getType(), arguments.getMetadata(), arguments.getJql());
             }
-        } catch (JSONException | IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | JSONException e) {
             throw new RuntimeException("[AssertThat BDD] Failed to upload report: ", e);
         }
 
