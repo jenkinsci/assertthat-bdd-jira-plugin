@@ -40,7 +40,8 @@ pipeline {
                                       projectId: '10005', 
                                       proxyPassword: '', 
                                       proxyURI: '', 
-                                      proxyUsername: ''
+                                      proxyUsername: '',
+                                      ignoreCertErrors: false
             }
         }
         stage('Run tests') { 
@@ -53,7 +54,14 @@ pipeline {
     post{
         always{
                 //Upload test results
-                assertthatBddReport(credentialsId: '10005',  jiraServerUrl: '', jsonReportFolder: 'report', jsonReportIncludePattern: '**/*.json', projectId: '10005', runName: 'Smoke test run', type: 'karate')
+                assertthatBddReport(credentialsId: '10005',
+                                    jiraServerUrl: '',
+                                    jsonReportFolder: 'report',
+                                    jsonReportIncludePattern: '**/*.json',
+                                    projectId: '10005',
+                                    runName: 'Smoke test run',
+                                    type: 'cucumber',
+                                    ignoreCertErrors: false)
         }
     }
 
