@@ -1,8 +1,8 @@
 package io.jenkins.plugins.assertthatbddjira;
 
-import com.assertthat.plugins.internal.APIUtil;
-import com.assertthat.plugins.internal.Arguments;
-import com.assertthat.plugins.internal.FileUtil;
+import com.assertthat.plugins.standalone.APIUtil;
+import com.assertthat.plugins.standalone.ArgumentsReport;
+import com.assertthat.plugins.standalone.FileUtil;
 import com.cloudbees.plugins.credentials.CredentialsMatchers;
 import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardCredentials;
@@ -49,6 +49,8 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     private final String proxyUsername;
     private final String proxyPassword;
     private final String jiraServerUrl;
+    private final String metadata;
+    private final String jql;
     private final boolean ignoreCertErrors;
 
     @DataBoundConstructor
@@ -60,7 +62,7 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
                                       String proxyURI, String proxyUsername,
                                       String proxyPassword,
                                       String jiraServerUrl,
-                                      boolean ignoreCertErrors) {
+                                      String metadata, String jql, boolean ignoreCertErrors) {
         this.projectId = projectId;
         this.credentialsId = credentialsId;
         this.jsonReportFolder = jsonReportFolder;
@@ -71,7 +73,17 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
         this.proxyUsername = proxyUsername;
         this.proxyPassword = proxyPassword;
         this.jiraServerUrl = jiraServerUrl;
+        this.metadata = metadata;
+        this.jql = jql;
         this.ignoreCertErrors = ignoreCertErrors;
+    }
+
+    public String getJql() {
+        return jql;
+    }
+
+    public String getMetadata() {
+        return metadata;
     }
 
     public boolean isIgnoreCertErrors() {
@@ -127,23 +139,20 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
     @Override
     public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener listener) {
         AssertThatBDDCredentials credentials = getAssertThatBDDCredentials(credentialsId);
-        Arguments arguments = new Arguments(
+        ArgumentsReport arguments = new ArgumentsReport(
                 credentials.getAccessKey(),
                 credentials.getSecretKey().getPlainText(),
                 projectId,
                 runName,
-                null,
                 jsonReportFolder,
                 jsonReportIncludePattern,
                 proxyURI,
                 proxyUsername,
                 proxyPassword,
-                null,
-                null,
-                null,
+                jql,
                 type,
                 jiraServerUrl,
-                false,
+                metadata,
                 ignoreCertErrors
         );
         String url = arguments.getJiraServerUrl() == null || arguments.getJiraServerUrl().trim().length() == 0 ? null : arguments.getJiraServerUrl().trim();

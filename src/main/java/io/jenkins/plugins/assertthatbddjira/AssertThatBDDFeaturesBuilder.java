@@ -1,8 +1,8 @@
 package io.jenkins.plugins.assertthatbddjira;
 
-import com.assertthat.plugins.internal.APIUtil;
-import com.assertthat.plugins.internal.Arguments;
-import com.assertthat.plugins.internal.FileUtil;
+import com.assertthat.plugins.standalone.APIUtil;
+import com.assertthat.plugins.standalone.ArgumentsFeatures;
+import com.assertthat.plugins.standalone.FileUtil;
 import com.cloudbees.plugins.credentials.CredentialsMatchers;
 import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardCredentials;
@@ -46,6 +46,7 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     private final String proxyUsername;
     private final String proxyPassword;
     private final String jiraServerUrl;
+    private final boolean numbered;
     private final boolean ignoreCertErrors;
 
     @DataBoundConstructor
@@ -57,7 +58,7 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
                                         String proxyUsername,
                                         String proxyPassword,
                                         String jiraServerUrl,
-                                        boolean ignoreCertErrors) {
+                                        boolean numbered, boolean ignoreCertErrors) {
         this.projectId = projectId;
         this.outputFolder = outputFolder;
         this.mode = mode;
@@ -68,7 +69,16 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
         this.proxyUsername = proxyUsername;
         this.proxyPassword = proxyPassword;
         this.jiraServerUrl = jiraServerUrl;
+        this.numbered = numbered;
         this.ignoreCertErrors = ignoreCertErrors;
+    }
+
+    public boolean isNumbered() {
+        return numbered;
+    }
+
+    public boolean isIgnoreCertErrors() {
+        return ignoreCertErrors;
     }
 
     public boolean getIgnoreCertErrors() {
@@ -124,23 +134,19 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
     @Override
     public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener listener) {
         AssertThatBDDCredentials credentials = getAssertThatBDDCredentials(credentialsId);
-        Arguments arguments = new Arguments(
+        ArgumentsFeatures arguments = new ArgumentsFeatures(
                 credentials.getAccessKey(),
                 credentials.getSecretKey().getPlainText(),
                 projectId,
-                null,
                 outputFolder,
-                null,
-                null,
                 proxyURI,
                 proxyUsername,
                 proxyPassword,
                 mode,
                 jql,
                 tags,
-                null,
                 jiraServerUrl,
-                true,
+                numbered,
                 ignoreCertErrors
         );
         String url = arguments.getJiraServerUrl() == null || arguments.getJiraServerUrl().trim().length() == 0 ? null : arguments.getJiraServerUrl().trim();
@@ -152,11 +158,11 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
                 outputPath = workspace.toURI().resolve(arguments.getOutputFolder()).getPath();
             }
             listener.getLogger().println("[AssertThat BDD] Downloading features to:  " + outputPath);
-            File inZip = apiUtil.download(new File(outputPath), mode, jql,
-                    tags, false);
+            File inZip = apiUtil.download(new File(outputPath), arguments.getMode(), arguments.getJql(),
+                    arguments.getTags(), arguments.isNumbered());
             File zip = new FileUtil().unpackArchive(inZip, new File(outputPath));
             boolean wasDeleted = zip.delete();
-            if (wasDeleted){
+            if (wasDeleted) {
                 listener.getLogger().println("[AssertThat BDD] Deleting zip:  " + zip.getName());
             }
         } catch (IOException | InterruptedException e) {

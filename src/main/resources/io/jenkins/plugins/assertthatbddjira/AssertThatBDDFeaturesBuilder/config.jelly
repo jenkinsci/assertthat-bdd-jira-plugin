@@ -50,5 +50,13 @@
                   <f:radio name="ignoreCertErrors" title="False" value="false" checked="${!instance.ignoreCertErrors}" />
                 </f:entry>
             </f:entry>
+                   <f:entry title="${%numbered}" field="numbered" description="${%numberedDescr}">
+                            <f:entry>
+                              <f:radio name="numbered" title="True" value="true" checked="${instance.numbered}" />
+                            </f:entry>
+                            <f:entry>
+                              <f:radio name="numbered" title="False" value="false" checked="${!instance.numbered}" />
+                            </f:entry>
+                        </f:entry>
    </f:advanced>
 </j:jelly>

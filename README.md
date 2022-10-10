@@ -55,12 +55,15 @@ pipeline {
         always{
                 //Upload test results
                 assertthatBddReport(credentialsId: '10005',
+                                    projectId: '10005',
                                     jiraServerUrl: '',
                                     jsonReportFolder: 'report',
                                     jsonReportIncludePattern: '**/*.json',
-                                    projectId: '10005',
                                     runName: 'Smoke test run',
                                     type: 'cucumber',
+                                    proxyURI: '',
+                                    proxyUsername: '',
+                                    proxyPassword: '',
                                     ignoreCertErrors: false)
         }
     }
