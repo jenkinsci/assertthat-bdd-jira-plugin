@@ -98,7 +98,7 @@
 
     <developers>
       <developer>
-          <id>glib.briia</id>
+          <id>glibas</id>
           <name>Glib Briia</name>
           <organization>AssertThat</organization>
           <organizationUrl>https://assertthat.com</organizationUrl>
@@ -127,4 +127,15 @@
             <url>https://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>maven.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/artifactory/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/artifactory/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
