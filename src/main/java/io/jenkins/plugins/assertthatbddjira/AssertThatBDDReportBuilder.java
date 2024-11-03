@@ -142,6 +142,7 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
         ArgumentsReport arguments = new ArgumentsReport(
                 credentials.getAccessKey(),
                 credentials.getSecretKey().getPlainText(),
+                credentials.getToken().getPlainText(),
                 projectId,
                 runName,
                 jsonReportFolder,
@@ -156,7 +157,15 @@ public class AssertThatBDDReportBuilder extends Recorder implements SimpleBuildS
                 ignoreCertErrors
         );
         String url = arguments.getJiraServerUrl() == null || arguments.getJiraServerUrl().trim().length() == 0 ? null : arguments.getJiraServerUrl().trim();
-        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(), url, false);
+        APIUtil apiUtil = new APIUtil(arguments.getProjectId(),
+                arguments.getAccessKey(),
+                arguments.getSecretKey(),
+                arguments.getToken(),
+                arguments.getProxyURI(),
+                arguments.getProxyUsername(),
+                arguments.getProxyPassword(),
+                url,
+                false);
 
         String[] files;
         try {

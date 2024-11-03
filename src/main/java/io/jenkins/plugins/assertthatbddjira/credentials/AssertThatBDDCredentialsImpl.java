@@ -10,33 +10,36 @@ import io.jenkins.plugins.assertthatbddjira.Messages;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class AssertThatBDDCredentialsImpl extends BaseStandardCredentials implements AssertThatBDDCredentials {
-    
-    @NonNull
+
     private final Secret secretKey;
-    
-    
-    @NonNull
+
     private final String accessKey;
+
+    private final Secret token;
     
     @DataBoundConstructor
     public AssertThatBDDCredentialsImpl(@CheckForNull String id,
                                 @CheckForNull String description,
-                                @NonNull String accessKey,
-                                @NonNull String secretKey       ) {
+                                 String accessKey,
+                                 String secretKey,
+                                 String token) {
         super(id, description);
         this.secretKey = Secret.fromString(secretKey);
         this.accessKey = accessKey;
+        this.token = Secret.fromString(token);
      
     }
-    
-    @NonNull
+
     public Secret getSecretKey() {
         return this.secretKey;
     }
-    
-    @NonNull
+
     public String getAccessKey() {
         return this.accessKey;
+    }
+
+    public Secret getToken() {
+        return this.token;
     }
     
     @Extension

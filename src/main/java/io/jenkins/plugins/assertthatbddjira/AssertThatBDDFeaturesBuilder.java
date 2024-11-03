@@ -137,6 +137,7 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
         ArgumentsFeatures arguments = new ArgumentsFeatures(
                 credentials.getAccessKey(),
                 credentials.getSecretKey().getPlainText(),
+                credentials.getToken().getPlainText(),
                 projectId,
                 outputFolder,
                 proxyURI,
@@ -147,10 +148,19 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
                 tags,
                 jiraServerUrl,
                 numbered,
-                ignoreCertErrors
+                ignoreCertErrors,
+                true
         );
         String url = arguments.getJiraServerUrl() == null || arguments.getJiraServerUrl().trim().length() == 0 ? null : arguments.getJiraServerUrl().trim();
-        APIUtil apiUtil = new APIUtil(arguments.getProjectId(), arguments.getAccessKey(), arguments.getSecretKey(), arguments.getProxyURI(), arguments.getProxyUsername(), arguments.getProxyPassword(), url, arguments.isIgnoreCertErrors());
+        APIUtil apiUtil = new APIUtil(arguments.getProjectId(),
+                arguments.getAccessKey(),
+                arguments.getSecretKey(),
+                arguments.getToken(),
+                arguments.getProxyURI(),
+                arguments.getProxyUsername(),
+                arguments.getProxyPassword(),
+                url,
+                arguments.isIgnoreCertErrors());
 
         try {
             String outputPath = workspace.toURI().getPath();
@@ -159,7 +169,7 @@ public class AssertThatBDDFeaturesBuilder extends Builder implements SimpleBuild
             }
             listener.getLogger().println("[AssertThat BDD] Downloading features to:  " + outputPath);
             File inZip = apiUtil.download(new File(outputPath), arguments.getMode(), arguments.getJql(),
-                    arguments.getTags(), arguments.isNumbered());
+                    arguments.getTags(), arguments.isNumbered(), arguments.isCleanupFeatures());
             File zip = new FileUtil().unpackArchive(inZip, new File(outputPath));
             boolean wasDeleted = zip.delete();
             if (wasDeleted) {

@@ -10,5 +10,7 @@ public interface AssertThatBDDCredentials extends Credentials {
     String getAccessKey();
     
     Secret getSecretKey();
+
+    Secret getToken();
 }
 
